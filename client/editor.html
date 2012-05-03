@@ -1,0 +1,14 @@
+<template name="editor">
+  {{#if show}}  
+  <div id="editor">   
+    Edting <strong>{{deckName}}</strong> <a href="#" id="done-editing">done</a>
+    <br />
+    {{#each cards}}
+      <img src="http://gatherer.wizards.com/Handlers/Image.ashx?name={{this}}&type=card" class="card" title="{{this}}" />
+    {{/each}}
+    <br style="clear: left;" />
+    <input id="new-card" type="text" />
+    <input id="add-card" type="button" value="Add Card" />
+  </div>
+  {{/if}}
+</template>

@@ -1,0 +1,49 @@
+body {
+  margin: 0;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+#dashboard {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #eee;
+  border-bottom: 1px solid #888;
+}
+
+.dashboard-label {
+  clear: left;
+  float: left;
+  width: 60px;
+  margin-right: 10px;
+  font-weight: bold;
+} 
+
+.dashboard-value {
+  float: left;
+}
+
+#change-game-form, #change-player-form, #change-deck-form {
+  display: none;
+}
+
+.card {
+  width: 223px;
+  height: 310px;
+}
+
+#mat {
+  position: relative;
+}
+
+#mat .card {
+  position: absolute;
+}
+
+#editor {
+  padding: 10px;
+}
+
+#editor .card {
+  float: left;
+  cursor: pointer;
+}

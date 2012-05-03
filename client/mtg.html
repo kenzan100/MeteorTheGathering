@@ -1,0 +1,39 @@
+<head>
+  <title>Meteor: The Gathering</title>
+  <script src="jquery-ui-1.8.20.custom.min.js"></script>
+  <script>
+    (function ($) {
+     $.fn.liveDraggable = function (opts) {
+      this.live("mouseover", function() {
+        if (!$(this).data("init")) {
+          $(this).data("init", true).draggable(opts);
+        }
+      });
+      return $();
+     };
+    }(jQuery));
+
+    $(function () {
+      var prevDraggedTime = 0;
+
+      $('#mat .card').liveDraggable({
+        stop: function (event, ui) {
+          $(this).trigger('dragged');
+        },
+        drag: function (event, ui) {
+          var now = new Date().getTime();
+          if (now - prevDraggedTime > 250) {
+            $(this).trigger('dragged');
+            prevDraggedTime = now;
+          }
+        }
+      });
+    });
+  </script>
+</head>
+
+<body>
+  {{> dashboard }}
+  {{> mat }}
+  {{> editor }}
+</body>
