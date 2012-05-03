@@ -37,8 +37,35 @@ Template.game.opponentDeckCardCount = function () {
   return (myOpponentDeck && myOpponentDeck.card_names) ? myOpponentDeck.card_names.length : 0;
 };
 
-Template.game.cards = function () {
-  return Cards.find({game_id: currentGameId()});
+Template.game.isStarted = function () {
+  return Cards.find({game_id: currentGameId(), player_id: currentPlayerId()}).count() > 0;
+};
+
+Template.game.librarySize = function () {
+  return Cards.find({game_id: currentGameId(), player_id: currentPlayerId(), state: 'library'}).count();
+};
+
+Template.game.myHand = function () {
+  return Cards.find({game_id: currentGameId(), player_id: currentPlayerId(), state: 'hand'});
+};
+
+Template.game.opponentIsStarted = function () {
+  var opp = currentOpponent();
+  return opp && Cards.find({game_id: currentGameId(), player_id: opp._id}).count() > 0;
+};
+
+Template.game.opponentLibrarySize = function () {
+  var opp = currentOpponent();
+  return opp ? Cards.find({game_id: currentGameId(), player_id: opp._id, state: 'library'}).count() : 0;
+};
+
+Template.game.opponentHand = function () {
+  var opp = currentOpponent();
+  return opp && Cards.find({game_id: currentGameId(), player_id: opp._id, state:'hand'});
+};
+
+Template.game.cardsOnMat = function () {
+  return Cards.find({game_id: currentGameId(), state: 'untapped'});
 };
 
 Template.game.events = {
@@ -124,16 +151,27 @@ Template.game.events = {
   },
   'click #edit-deck': function () {
     Session.set('editor', true);
-  },	
-  'click #play-random': function () {
+  },
+  'click #start': function () {
     var myDeck = currentPlayerDeck();
-    var cardName;
-    if (myDeck && myDeck.card_names && myDeck.card_names.length > 0) {
-      cardName = myDeck.card_names[Math.floor(Math.random() * myDeck.card_names.length)];
-      Cards.insert({name: cardName, player_id: currentPlayerId(), game_id: currentGameId(), top: 100, left: 100});
+    var i;    
+    if (myDeck) {
+      for (i = 0; i < myDeck.card_names.length; i++) {
+        Cards.insert({name: myDeck.card_names[i], player_id: currentPlayerId(), game_id: currentGameId(), state: 'library' });
+      }
     }
   },
-  'dragged .card': function () {
+  'click #draw': function () {
+    var card = Cards.findOne({game_id: currentGameId(), player_id: currentPlayerId(), state: 'library'});
+    if (card) {
+      Cards.update(card._id, {$set: {state: 'hand'}});
+    }
+  },
+  'click #my-hand .card': function (e) {
+    var cardId = e.target.id.substring(5);
+    Cards.update(cardId, {$set: {state: 'untapped', top: 100, left: 100}});
+  },
+  'dragged .card': function (e) {
     var cardId = e.target.id.substring(5);
     var $target = $(e.target);
     Cards.update(cardId, {$set: {top: $target.position().top, left: $target.position().left}});

@@ -24,10 +24,18 @@
         {{/if}}
         <input type="text" style="width: 1px; visibility: hidden;" />
       </div>
+      {{#if opponentIsStarted}}
+        <div id="opponent-library-info">
+          Library ({{opponentLibrarySize}})
+        </div>
+        {{#each opponentHand}}
+          <img src="back.jpg" class="card" />
+        {{/each}}
+      {{/if}}
     </div>
     <div id="mat">
       <div id="mat-contents">
-        {{#each cards}}
+        {{#each cardsOnMat}}
         <img src="http://gatherer.wizards.com/Handlers/Image.ashx?name={{name}}&type=card" class="card" title="{{name}}" style="top: {{top}}px; left: {{left}}px;" id="card-{{_id}}" />
         {{/each}}
       </div>
@@ -53,7 +61,19 @@
         </span>
         <input type="text" style="width: 1px; visibility: hidden;" />
       </div>
-      <input id="play-random" type="button" value="Play Random Card" style="margin-left: 10px;" />
+      {{#if isStarted}}
+        <div id="library-info">
+          Library ({{librarySize}})<br />
+          <input id="draw" type="button" value="Draw" />
+        </div>
+        {{#each myHand}}
+          <img src="http://gatherer.wizards.com/Handlers/Image.ashx?name={{name}}&type=card" class="card" title="{{name}}" id="card-{{_id}}" />
+        {{/each}}
+      {{else}}
+      <div id="library-info">
+        <input id="start" type="button" value="Start" />
+      </div>
+      {{/if}}
     </div>
   </div>
   {{/if}}
