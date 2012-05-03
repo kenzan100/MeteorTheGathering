@@ -74,8 +74,19 @@ Template.dashboard.events = {
   },
   'click #change-player': function () {
     var playerName = $.trim($('#new-player').val());
-    Players.update(currentPlayerId(), {$set: {name: playerName}});
-    
+    var existingPlayer = Players.findOne({name: playerName});
+    var playerId;
+
+    if (existingPlayer) {
+      playerId = existingPlayer._id;
+      Session.set('player_id', playerId);
+      Session.set('game_id', existingPlayer.game_id);
+    }
+    else {
+      playerId = currentPlayerId();
+      Players.update(playerId, {$set: {name: playerName}});
+    }
+
     $('#change-player-form').hide();
     $('#player-name').show();
   },

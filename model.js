@@ -12,8 +12,8 @@ if (Meteor.is_server) {
     return Games.find({});
   });  
 
-  Meteor.publish('players', function (gameId) {
-    return Players.find({game_id: gameId});
+  Meteor.publish('players', function () {
+    return Players.find();
   });
 
   Meteor.publish('decks', function () {

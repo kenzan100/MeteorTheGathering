@@ -42,10 +42,10 @@ Meteor.startup(function () {
   Session.set('editor', false);
   
   Meteor.subscribe('games');
+  Meteor.subscribe('players');
   Meteor.subscribe('decks');
 
   Meteor.autosubscribe(function () {
-    Meteor.subscribe('players', Session.get('game_id'));
     Meteor.subscribe('cards', Session.get('game_id'));
   });
 });
