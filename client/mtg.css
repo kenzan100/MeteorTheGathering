@@ -1,38 +1,71 @@
+html {
+  width: 100%;
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  width: 100%;
+  height: 100%;
+}
+
+#game {
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 #dashboard {
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #eee;
-  border-bottom: 1px solid #888;
+  position: absolute;
+  width: 100%;
+  height: 25px;
+  top: 0;
+  left: 0;
 }
 
-.dashboard-label {
-  clear: left;
-  float: left;
-  width: 60px;
-  margin-right: 10px;
-  font-weight: bold;
-} 
+#their-hand {
+  position: absolute;
+  top: 25px;
+  left: 0;
+  background-color: #eee;
+  width: 100%;
+  height: 70px;
+}
 
-.dashboard-value {
-  float: left;
+#mat {
+  position: absolute;
+  top: 95px;  
+  bottom: 70px;
+  width: 100%;
+  overflow: auto;
+}
+
+#my-hand {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: #eee;
+  width: 100%;
+  height: 70px;
+}
+
+#game-info, #player-info, #opponent-info {
+  padding-left: 10px;
 }
 
 #change-game-form, #change-player-form, #change-deck-form {
   display: none;
 }
 
-.card {
-  width: 223px;
-  height: 310px;
+#mat-contents {
+  position: relative;
 }
 
-#mat {
-  position: relative;
+.card {
+  width: 143px;
+  height: 200px;
 }
 
 #mat .card {

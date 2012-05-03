@@ -1,0 +1,60 @@
+<template name="game">
+  {{#if show}}
+  <div id="game">
+    <div id="dashboard">
+      <div id="game-info">
+        <span id="game-name">
+          {{gameName}} [<a href="#" id="show-game-form">change game</a>]
+          <input type="text" style="width: 1px; visibility: hidden;" />
+        </span>
+        <span id="change-game-form">
+          <input id="new-game" type="text" value="{{gameName}}" />
+          <input id="change-game" type="button" value="Change Game" />
+          <a href="#" id="cancel-game-form">cancel</a>
+        </span>
+      </div>
+    </div>
+    <div id="their-hand">
+      <div id="opponent-info">
+        {{#if opponentPlayerName}}
+          {{opponentPlayerName}}
+          <em>armed w/</em> {{opponentDeckName}} ({{opponentDeckCardCount}} cards)
+        {{else}}
+          <em>nobody</em>
+        {{/if}}
+        <input type="text" style="width: 1px; visibility: hidden;" />
+      </div>
+    </div>
+    <div id="mat">
+      <div id="mat-contents">
+        {{#each cards}}
+        <img src="http://gatherer.wizards.com/Handlers/Image.ashx?name={{name}}&type=card" class="card" title="{{name}}" style="top: {{top}}px; left: {{left}}px;" id="card-{{_id}}" />
+        {{/each}}
+      </div>
+    </div>
+    <div id="my-hand">
+      <div id="player-info">
+        <span id="player-name">
+          {{playerName}} [<a href="#" id="show-player-form">change name</a>]
+        </span>
+        <span id="change-player-form">
+          <input id="new-player" type="text" value="{{playerName}}" />
+          <input id="change-player" type="button" value="Change Name" />
+          <a id="cancel-player-form" href="#">cancel</a>
+        </span>
+        <em>armed w/</em>
+        <span id="deck-name">      
+          {{deckName}} ({{deckCardCount}} cards) [<a href="#" id="show-deck-form">change deck</a> | <a href="#" id="edit-deck">edit contents</a>]
+        </span>
+        <span id="change-deck-form">
+          <input id="new-deck" type="text" value="{{deckName}}" />
+          <input id="change-deck" type="button" value="Change Deck" />
+          <a id="cancel-deck-form" href="#">cancel</a>
+        </span>
+        <input type="text" style="width: 1px; visibility: hidden;" />
+      </div>
+      <input id="play-random" type="button" value="Play Random Card" style="margin-left: 10px;" />
+    </div>
+  </div>
+  {{/if}}
+</template>

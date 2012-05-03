@@ -1,51 +1,57 @@
-Template.dashboard.gameName = function () {
+Template.game.show = function () {
+  return !Session.get('editor');
+}
+
+Template.game.gameName = function () {
   var myGame = currentGame();
   return myGame && myGame.name;
 };
 
-Template.dashboard.playerName = function () {
+Template.game.playerName = function () {
   var me = currentPlayer();
   return me && me.name;
 };
 
-Template.dashboard.deckName = function () {
+Template.game.deckName = function () {
   var myDeck = currentPlayerDeck();
   return myDeck && myDeck.name;
 };
 
-Template.dashboard.deckCardCount = function () {
+Template.game.deckCardCount = function () {
   var myDeck = currentPlayerDeck();
   return (myDeck && myDeck.card_names) ? myDeck.card_names.length : 0;
 };
 
-Template.dashboard.opponentPlayerName = function () {
+Template.game.opponentPlayerName = function () {
   var myOpponent = currentOpponent();
   return myOpponent && myOpponent.name;
 };
 
-Template.dashboard.opponentDeckName = function () {
+Template.game.opponentDeckName = function () {
   var myOpponentDeck = currentOpponentDeck();
   return myOpponentDeck && myOpponentDeck.name;
 };
 
-Template.dashboard.opponentDeckCardCount = function () {
+Template.game.opponentDeckCardCount = function () {
   var myOpponentDeck = currentOpponentDeck();
   return (myOpponentDeck && myOpponentDeck.card_names) ? myOpponentDeck.card_names.length : 0;
 };
 
-Template.dashboard.events = {
-  'click #show-game-form': function (e) {
+Template.game.cards = function () {
+  return Cards.find({game_id: currentGameId()});
+};
+
+Template.game.events = {
+  'click #show-game-form': function () {
     $('#game-name').hide();
     $('#change-game-form').show();
     $('#new-game').select();
-    e.stopPropagation();    
-    return false;
   },
-  'click #cancel-game-form': function (e) {
+  'click #cancel-game-form': function () {
     $('#change-game-form').hide();
     $('#game-name').show();
   },
-  'click #change-game': function (e) {
+  'click #change-game': function () {
     var gameName = $.trim($('#new-game').val());
     var existingGame = Games.findOne({name: gameName});
     var gameId;
@@ -63,12 +69,12 @@ Template.dashboard.events = {
     $('#change-game-form').hide();
     $('#game-name').show();
   },
-  'click #show-player-form': function (e) {
+  'click #show-player-form': function () {
     $('#player-name').hide();
     $('#change-player-form').show();
     $('#new-player').select();
   },
-  'click #cancel-player-form': function (e) {
+  'click #cancel-player-form': function () {
     $('#change-player-form').hide();
     $('#player-name').show();
   },
@@ -95,7 +101,7 @@ Template.dashboard.events = {
     $('#change-deck-form').show();
     $('#new-deck').select();
   },
-  'click #cancel-deck-form': function (e) {
+  'click #cancel-deck-form': function () {
     $('#change-deck-form').hide();
     $('#deck-name').show();
   },
@@ -118,5 +124,18 @@ Template.dashboard.events = {
   },
   'click #edit-deck': function () {
     Session.set('editor', true);
+  },	
+  'click #play-random': function () {
+    var myDeck = currentPlayerDeck();
+    var cardName;
+    if (myDeck && myDeck.card_names && myDeck.card_names.length > 0) {
+      cardName = myDeck.card_names[Math.floor(Math.random() * myDeck.card_names.length)];
+      Cards.insert({name: cardName, player_id: currentPlayerId(), game_id: currentGameId(), top: 100, left: 100});
+    }
+  },
+  'dragged .card': function () {
+    var cardId = e.target.id.substring(5);
+    var $target = $(e.target);
+    Cards.update(cardId, {$set: {top: $target.position().top, left: $target.position().left}});
   }
 };
