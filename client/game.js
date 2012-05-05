@@ -89,7 +89,7 @@ Template.game.events = {
       gameId = existingGame._id;
     }
     else {
-      gameId = Games.insert({name: gameName});
+      gameId = createNewGame(gameName);
     }
     
     Session.set('game_id', gameId);
@@ -179,11 +179,17 @@ Template.game.events = {
   },
   'click #my-hand .card': function (e) {
     var cardId = e.target.id.substring(5);
-    Cards.update(cardId, {$set: {state: 'untapped', top: 100, left: 100}});
+    incrementCurrentMaxZIndex();
+    Cards.update(cardId, {$set: {state: 'untapped', top: 100, left: 100, z_index: currentMaxZIndex()}});
   },
   'dragged .card': function (e) {
     var cardId = e.target.id.substring(5);
     var $target = $(e.target);
     Cards.update(cardId, {$set: {top: $target.position().top, left: $target.position().left}});
+  },
+  'elevate .card': function (e) {
+    var cardId = e.target.id.substring(5);
+    incrementCurrentMaxZIndex();
+    Cards.update(cardId, {$set: {z_index: currentMaxZIndex()}});
   }
 };

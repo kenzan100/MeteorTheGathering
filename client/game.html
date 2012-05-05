@@ -36,7 +36,7 @@
     <div id="mat">
       <div id="mat-contents">
         {{#each cardsOnMat}}
-        <img src="http://gatherer.wizards.com/Handlers/Image.ashx?name={{name}}&type=card" class="card" title="{{name}}" style="top: {{top}}px; left: {{left}}px;" id="card-{{_id}}" />
+        <img src="http://gatherer.wizards.com/Handlers/Image.ashx?name={{name}}&type=card" class="card" title="{{name}}" style="top: {{top}}px; left: {{left}}px; z-index: {{z_index}};" id="card-{{_id}}" />
         {{/each}}
       </div>
     </div>

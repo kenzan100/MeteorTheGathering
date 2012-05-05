@@ -28,8 +28,18 @@ var currentOpponentDeck = function () {
   return myOpponent && Decks.findOne(myOpponent.deck_id);
 };
 
+var currentMaxZIndex = function () {
+  var myGame = currentGame();
+  return myGame ? myGame.max_z_index : 0;
+};
+
+var incrementCurrentMaxZIndex = function () {
+  var myGame = currentGame();
+  Games.update(myGame._id, {$inc: {max_z_index: 1}});
+};
+
 Meteor.startup(function () {
-  var gameId = Games.insert({name: ''});
+  var gameId = createNewGame('');
   var deckId = createNewDeck('');
   var playerId = Players.insert({name: '', game_id: gameId, deck_id: deckId});
 

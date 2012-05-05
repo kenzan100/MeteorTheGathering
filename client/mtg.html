@@ -14,17 +14,26 @@
     }(jQuery));
 
     $(function () {
+      var prevDraggedId = '';
       var prevDraggedTime = 0;
 
       $('#mat .card').liveDraggable({
         stop: function (event, ui) {
+          $(this).trigger('elevate');
           $(this).trigger('dragged');
+          prevDraggedId = '';
         },
         drag: function (event, ui) {
           var now = new Date().getTime();
+          
+          if (this.id != prevDraggedId) {
+            $(this).trigger('elevate');
+            prevDraggedId = this.id;
+          }
+
           if (now - prevDraggedTime > 250) {
             $(this).trigger('dragged');
-            prevDraggedTime = now;
+            prevDraggedTime = now;            
           }
         }
       });
