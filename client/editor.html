@@ -7,8 +7,10 @@
       <img src="http://gatherer.wizards.com/Handlers/Image.ashx?name={{this}}&type=card" class="card" title="{{this}}" />
     {{/each}}
     <br style="clear: left;" />
-    <input id="new-card" type="text" />
-    <input id="add-card" type="button" value="Add Card" />
+    <form id="add-card-form">
+      <input id="new-card" type="text" />
+      <input type="submit" value="Add Card" />
+    </form>
   </div>
   {{/if}}
 </template>

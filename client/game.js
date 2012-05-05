@@ -69,16 +69,18 @@ Template.game.cardsOnMat = function () {
 };
 
 Template.game.events = {
-  'click #show-game-form': function () {
+  'click #show-game-form': function (e) {
     $('#game-name').hide();
     $('#change-game-form').show();
     $('#new-game').select();
+    e.preventDefault();
   },
-  'click #cancel-game-form': function () {
+  'click #cancel-game-form': function (e) {
     $('#change-game-form').hide();
     $('#game-name').show();
+    e.preventDefault();
   },
-  'click #change-game': function () {
+  'submit #change-game-form': function (e) {
     var gameName = $.trim($('#new-game').val());
     var existingGame = Games.findOne({name: gameName});
     var gameId;
@@ -95,17 +97,20 @@ Template.game.events = {
 
     $('#change-game-form').hide();
     $('#game-name').show();
+    e.preventDefault();
   },
-  'click #show-player-form': function () {
+  'click #show-player-form': function (e) {
     $('#player-name').hide();
     $('#change-player-form').show();
     $('#new-player').select();
+    e.preventDefault();
   },
-  'click #cancel-player-form': function () {
+  'click #cancel-player-form': function (e) {
     $('#change-player-form').hide();
     $('#player-name').show();
+    e.preventDefault();
   },
-  'click #change-player': function () {
+  'submit #change-player-form': function (e) {
     var playerName = $.trim($('#new-player').val());
     var existingPlayer = Players.findOne({name: playerName});
     var playerId;
@@ -122,17 +127,20 @@ Template.game.events = {
 
     $('#change-player-form').hide();
     $('#player-name').show();
+    e.preventDefault();
   },
-  'click #show-deck-form': function () {
+  'click #show-deck-form': function (e) {
     $('#deck-name').hide();
     $('#change-deck-form').show();
     $('#new-deck').select();
+    e.preventDefault();
   },
-  'click #cancel-deck-form': function () {
+  'click #cancel-deck-form': function (e) {
     $('#change-deck-form').hide();
     $('#deck-name').show();
+    e.preventDefault();
   },
-  'click #change-deck': function () {
+  'submit #change-deck-form': function (e) {
     var deckName = $.trim($('#new-deck').val());
     var existingDeck = Decks.findOne({name: deckName});
     var deckId;
@@ -148,9 +156,11 @@ Template.game.events = {
 
     $('#change-deck-form').hide();
     $('#deck-name').show();
+    e.preventDefault();
   },
-  'click #edit-deck': function () {
+  'click #edit-deck': function (e) {
     Session.set('editor', true);
+    e.preventDefault();
   },
   'click #start': function () {
     var myDeck = currentPlayerDeck();
