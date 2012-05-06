@@ -82,10 +82,15 @@ Template.game.events = {
   },
   'submit #change-game-form': function (e) {
     var gameName = $.trim($('#new-game').val());
-    var existingGame = Games.findOne({name: gameName});
-    var gameId;
-    
+    var existingGame, gameId;
+
     e.preventDefault();
+
+    if (gameName.length == 0) {
+      return;
+    }
+
+    existingGame = Games.findOne({name: gameName});
 
     if (existingGame) {
       if (Players.find({game_id: existingGame._id, _id: {$ne: currentPlayerId()}}).count() >= 2) {
@@ -118,8 +123,15 @@ Template.game.events = {
   },
   'submit #change-player-form': function (e) {
     var playerName = $.trim($('#new-player').val());
-    var existingPlayer = Players.findOne({name: playerName});
-    var playerId;
+    var existingPlayer, playerId;
+
+    e.preventDefault();
+
+    if (playerName.length == 0) {
+      return;
+    }
+
+    existingPlayer = Players.findOne({name: playerName});
 
     if (existingPlayer) {
       playerId = existingPlayer._id;
@@ -133,7 +145,6 @@ Template.game.events = {
 
     $('#change-player-form').hide();
     $('#player-name').show();
-    e.preventDefault();
   },
   'click #show-deck-form': function (e) {
     $('#deck-name').hide();
@@ -148,9 +159,16 @@ Template.game.events = {
   },
   'submit #change-deck-form': function (e) {
     var deckName = $.trim($('#new-deck').val());
-    var existingDeck = Decks.findOne({name: deckName});
-    var deckId;
+    var existingDeck, deckId;
     
+    e.preventDefault();
+
+    if (deckName.length == 0) {
+      return;
+    }
+
+    existingDeck = Decks.findOne({name: deckName});
+
     if (existingDeck) {
       deckId = existingDeck._id;
     }
@@ -162,7 +180,6 @@ Template.game.events = {
 
     $('#change-deck-form').hide();
     $('#deck-name').show();
-    e.preventDefault();
   },
   'click #edit-deck': function (e) {
     Session.set('editor', true);
