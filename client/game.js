@@ -85,7 +85,14 @@ Template.game.events = {
     var existingGame = Games.findOne({name: gameName});
     var gameId;
     
+    e.preventDefault();
+
     if (existingGame) {
+      if (Players.find({game_id: existingGame._id, _id: {$ne: currentPlayerId()}}).count() >= 2) {
+        alert('There are already two players in ' + gameName);
+        return;
+      }
+
       gameId = existingGame._id;
     }
     else {
@@ -97,7 +104,6 @@ Template.game.events = {
 
     $('#change-game-form').hide();
     $('#game-name').show();
-    e.preventDefault();
   },
   'click #show-player-form': function (e) {
     $('#player-name').hide();
