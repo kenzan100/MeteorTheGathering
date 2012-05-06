@@ -46,7 +46,7 @@ Template.game.librarySize = function () {
 };
 
 Template.game.myHand = function () {
-  return Cards.find({game_id: currentGameId(), player_id: currentPlayerId(), state: 'hand'});
+  return Cards.find({game_id: currentGameId(), player_id: currentPlayerId(), state: 'hand'}, {sort: {draw_time: 1}});
 };
 
 Template.game.opponentIsStarted = function () {
@@ -61,7 +61,7 @@ Template.game.opponentLibrarySize = function () {
 
 Template.game.opponentHand = function () {
   var opp = currentOpponent();
-  return opp && Cards.find({game_id: currentGameId(), player_id: opp._id, state:'hand'});
+  return opp && Cards.find({game_id: currentGameId(), player_id: opp._id, state: 'hand'});
 };
 
 Template.game.cardsOnMat = function () {
@@ -195,9 +195,16 @@ Template.game.events = {
     }
   },
   'click #draw': function () {
-    var card = Cards.findOne({game_id: currentGameId(), player_id: currentPlayerId(), state: 'library'});
-    if (card) {
-      Cards.update(card._id, {$set: {state: 'hand'}});
+    var myDeck = currentPlayerDeck();
+    var deckSize, skip, card;
+    
+    if (myDeck) {
+      deckSize = Cards.find({game_id: currentGameId(), player_id: currentPlayerId(), state: 'library'}).count();
+      skip = Math.floor(Math.random() * deckSize);
+      card = Cards.findOne({game_id: currentGameId(), player_id: currentPlayerId(), state: 'library'}, {skip: skip});
+      if (card) {
+        Cards.update(card._id, {$set: {state: 'hand', draw_time: new Date().getTime()}});
+      }
     }
   },
   'click #my-hand .card': function (e) {
