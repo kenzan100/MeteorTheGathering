@@ -46,7 +46,7 @@ Template.game.librarySize = function () {
 };
 
 Template.game.myHand = function () {
-  return Cards.find({game_id: currentGameId(), player_id: currentPlayerId(), state: 'hand'}, {sort: {draw_time: 1}});
+  return Cards.find({game_id: currentGameId(), player_id: currentPlayerId(), state: 'hand'}, {sort: {hand_time: 1}});
 };
 
 Template.game.opponentIsStarted = function () {
@@ -213,7 +213,7 @@ Template.game.events = {
       skip = Math.floor(Math.random() * deckSize);
       card = Cards.findOne({game_id: currentGameId(), player_id: currentPlayerId(), state: 'library'}, {skip: skip});
       if (card) {
-        Cards.update(card._id, {$set: {state: 'hand', draw_time: new Date().getTime()}});
+        Cards.update(card._id, {$set: {state: 'hand', hand_time: new Date().getTime()}});
       }
     }
   },
@@ -248,7 +248,7 @@ Template.game.events = {
     var $target = $(e.target);
     
     if ($target.hasClass('unsummon')) {
-      Cards.update(cardId, {$set: {state: 'hand'}});
+      Cards.update(cardId, {$set: {state: 'hand', hand_time: new Date().getTime()}});
     }
     else if ($target.hasClass('tap')) {
       Cards.update(cardId, {$set: {state: 'tapped'}});
