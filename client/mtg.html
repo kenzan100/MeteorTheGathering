@@ -17,22 +17,27 @@
       var prevDraggedId = '';
       var prevDraggedTime = 0;
 
-      $('#mat .card').liveDraggable({
+      $('#mat .card-container').liveDraggable({
         distance: 3,
         stop: function (event, ui) {
-          $(this).trigger('elevate').trigger('dragged');
+          $(this).find('.card').trigger('elevate').trigger('dragged');
           prevDraggedId = '';
         },
         drag: function (event, ui) {
           var now = new Date().getTime();
+          var $card;
           
           if (this.id != prevDraggedId) {
-            $(this).trigger('elevate');
+            $card = $(this).find('.card');
+            $card.trigger('elevate');
             prevDraggedId = this.id;
           }
 
           if (now - prevDraggedTime > 250) {
-            $(this).trigger('dragged');
+            if (!$card) {
+              $card = $(this).find('.card');
+            }
+            $card.trigger('dragged');
             prevDraggedTime = now;
           }
         }

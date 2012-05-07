@@ -68,10 +68,11 @@ Template.game.cardsOnMat = function () {
   return Cards.find({game_id: currentGameId(), $or: [{state: 'untapped'}, {state: 'tapped'}]})
     .map(function (card) {
       if (Session.equals('menu', card._id)) {
-        card.showMenu = true;
         card.menuItems = [];
         card.menuItems.push(card.state == 'untapped' ? {action: 'tap', text: 'tap'} : {action: 'untap', text: 'untap'});
         card.menuItems.push({action: 'unsummon', text: 'return to hand'});
+        card.menuTop = card.state == 'tapped' ? card.top + 28 : card.top;
+        card.menuLeft = card.state == 'tapped' ? card.left -28 : card.left;
       }
       return card;
     });
@@ -223,8 +224,8 @@ Template.game.events = {
   },
   'dragged .card': function (e) {
     var cardId = e.target.id.substring(5);
-    var $target = $(e.target);
-    Cards.update(cardId, {$set: {top: $target.position().top, left: $target.position().left}});
+    var position = $(e.target).parent().position();
+    Cards.update(cardId, {$set: {top: position.top, left: position.left}});
     Session.set('menu', '');
   },
   'elevate .card': function (e) {

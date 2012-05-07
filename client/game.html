@@ -36,9 +36,11 @@
     <div id="mat">
       <div id="mat-contents">
         {{#each cardsOnMat}}
-        <img src="http://gatherer.wizards.com/Handlers/Image.ashx?name={{name}}&type=card" class="card {{state}}" title="{{name}}" style="top: {{top}}px; left: {{left}}px; z-index: {{z_index}};" id="card-{{_id}}" />
-          {{#if showMenu}}
-            <div id="menu" style="top: {{top}}px; left: {{left}}px;">
+          <div id="card-container-{{_id}}" class="card-container" style="top: {{top}}px; left: {{left}}px; z-index: {{z_index}};">
+            <img src="http://gatherer.wizards.com/Handlers/Image.ashx?name={{name}}&type=card" class="card {{state}}" title="{{name}}" id="card-{{_id}}" />
+          </div>
+          {{#if menuItems}}
+            <div id="menu" style="top: {{menuTop}}px; left: {{menuLeft}}px;">
               {{#each menuItems}}
                 <a href="#" class="{{action}}">{{text}}</a><br />
               {{/each}}

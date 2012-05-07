@@ -72,13 +72,13 @@ body {
   position: relative;
 }
 
+.card-container {
+  position: absolute;
+}
+
 .card {
   width: 143px;
   height: 200px;
-}
-
-#mat .card {
-  position: absolute;
 }
 
 #menu {
