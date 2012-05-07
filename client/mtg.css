@@ -81,6 +81,23 @@ body {
   position: absolute;
 }
 
+#menu {
+  position: absolute;
+  background: black;
+  padding: 5px;
+  z-index: 1000000;
+}
+
+#menu a {
+  color: white;
+}
+
+.tapped {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+}
+
 #editor {
   padding: 10px;
 }

@@ -65,7 +65,16 @@ Template.game.opponentHand = function () {
 };
 
 Template.game.cardsOnMat = function () {
-  return Cards.find({game_id: currentGameId(), state: 'untapped'});
+  return Cards.find({game_id: currentGameId(), $or: [{state: 'untapped'}, {state: 'tapped'}]})
+    .map(function (card) {
+      if (Session.equals('menu', card._id)) {
+        card.showMenu = true;
+        card.menuItems = [];
+        card.menuItems.push(card.state == 'untapped' ? {action: 'tap', text: 'tap'} : {action: 'untap', text: 'untap'});
+        card.menuItems.push({action: 'unsummon', text: 'return to hand'});
+      }
+      return card;
+    });
 };
 
 Template.game.events = {
@@ -216,10 +225,38 @@ Template.game.events = {
     var cardId = e.target.id.substring(5);
     var $target = $(e.target);
     Cards.update(cardId, {$set: {top: $target.position().top, left: $target.position().left}});
+    Session.set('menu', '');
   },
   'elevate .card': function (e) {
     var cardId = e.target.id.substring(5);
     incrementCurrentMaxZIndex();
     Cards.update(cardId, {$set: {z_index: currentMaxZIndex()}});
+  },
+  'menu .card': function (e) {
+    var cardId = e.target.id.substring(5);
+    Session.set('menu', cardId);
+  },
+  'mousedown': function (e) {
+    var menuCardId = Session.get('menu');
+    if (e.target.id != 'menu' && e.target.id != ('card-' + menuCardId) && !$(e.target).parents('#menu').length) {
+      Session.set('menu', '');
+    }
+  },
+  'click #menu a': function (e) {
+    var cardId = Session.get('menu');
+    var $target = $(e.target);
+    
+    if ($target.hasClass('unsummon')) {
+      Cards.update(cardId, {$set: {state: 'hand'}});
+    }
+    else if ($target.hasClass('tap')) {
+      Cards.update(cardId, {$set: {state: 'tapped'}});
+    }
+    else if ($target.hasClass('untap')) {
+      Cards.update(cardId, {$set: {state: 'untapped'}});
+    }
+    
+    e.preventDefault();
+    Session.set('menu', '');
   }
 };

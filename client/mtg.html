@@ -18,9 +18,9 @@
       var prevDraggedTime = 0;
 
       $('#mat .card').liveDraggable({
+        distance: 3,
         stop: function (event, ui) {
-          $(this).trigger('elevate');
-          $(this).trigger('dragged');
+          $(this).trigger('elevate').trigger('dragged');
           prevDraggedId = '';
         },
         drag: function (event, ui) {
@@ -33,9 +33,16 @@
 
           if (now - prevDraggedTime > 250) {
             $(this).trigger('dragged');
-            prevDraggedTime = now;            
+            prevDraggedTime = now;
           }
         }
+      });
+      
+      $('body').on('mouseup', '#mat .card', function () {
+        if (prevDraggedId != '') {
+          return;
+        }
+        $(this).trigger('elevate').trigger('menu');
       });
     });
   </script>
