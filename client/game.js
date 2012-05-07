@@ -219,8 +219,11 @@ Template.game.events = {
   },
   'click #my-hand .card': function (e) {
     var cardId = e.target.id.substring(5);
+    var $mat = $('#mat');
+    var top = $mat.height() / 2 - 100 + Math.floor(Math.random() * 31) - 15;
+    var left = $mat.width() / 2 - 72 + Math.floor(Math.random() * 31) - 15;
     incrementCurrentMaxZIndex();
-    Cards.update(cardId, {$set: {state: 'untapped', top: 100, left: 100, z_index: currentMaxZIndex()}});
+    Cards.update(cardId, {$set: {state: 'untapped', top: top, left: left, z_index: currentMaxZIndex()}});
   },
   'dragged .card': function (e) {
     var cardId = e.target.id.substring(5);
