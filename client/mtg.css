@@ -83,7 +83,7 @@ body {
 
 #menu {
   position: absolute;
-  background: black;
+  background: rgba(0, 0, 0, 0.7);
   padding: 5px;
   z-index: 1000000;
 }
