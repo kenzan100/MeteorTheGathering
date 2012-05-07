@@ -28,14 +28,10 @@ var currentOpponentDeck = function () {
   return myOpponent && Decks.findOne(myOpponent.deck_id);
 };
 
-var currentMaxZIndex = function () {
-  var myGame = currentGame();
-  return myGame ? myGame.max_z_index : 0;
-};
-
 var incrementCurrentMaxZIndex = function () {
   var myGame = currentGame();
   Games.update(myGame._id, {$inc: {max_z_index: 1}});
+  return (myGame && myGame.max_z_index) || 0;
 };
 
 Meteor.startup(function () {

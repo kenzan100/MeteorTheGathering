@@ -222,8 +222,8 @@ Template.game.events = {
     var $mat = $('#mat');
     var top = $mat.height() / 2 - 100 + Math.floor(Math.random() * 31) - 15;
     var left = $mat.width() / 2 - 72 + Math.floor(Math.random() * 31) - 15;
-    incrementCurrentMaxZIndex();
-    Cards.update(cardId, {$set: {state: 'untapped', top: top, left: left, z_index: currentMaxZIndex()}});
+    var maxZIndex = incrementCurrentMaxZIndex();
+    Cards.update(cardId, {$set: {state: 'untapped', top: top, left: left, z_index: maxZIndex}});
   },
   'dragged .card': function (e) {
     var cardId = e.target.id.substring(5);
@@ -233,8 +233,8 @@ Template.game.events = {
   },
   'elevate .card': function (e) {
     var cardId = e.target.id.substring(5);
-    incrementCurrentMaxZIndex();
-    Cards.update(cardId, {$set: {z_index: currentMaxZIndex()}});
+    var maxZIndex = incrementCurrentMaxZIndex();
+    Cards.update(cardId, {$set: {z_index: maxZIndex}});
   },
   'menu .card': function (e) {
     var cardId = e.target.id.substring(5);
