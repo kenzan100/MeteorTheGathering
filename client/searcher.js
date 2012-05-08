@@ -15,5 +15,6 @@ Template.searcher.events = {
     var cardId = e.target.id.substring(7);
     Cards.update(cardId, {$set: {state: 'hand', hand_time: new Date().getTime()}});
     Session.set('mode', 'game');
+    e.preventDefault();
   }
 };
