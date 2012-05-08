@@ -1,12 +1,13 @@
 <template name="editor">
   {{#if show}}  
   <div id="editor">   
-    Edting <strong>{{deckName}}</strong> <a href="#" id="done-editing">done</a>
+    <strong>Edting {{deckName}} ({{deckCardCount}} cards)</strong> <a href="#" id="done-editing">done</a><br />
     <br />
     {{#each cards}}
       <img src="http://gatherer.wizards.com/Handlers/Image.ashx?name={{this}}&type=card" class="card" title="{{this}}" />
     {{/each}}
     <br style="clear: left;" />
+    <br />
     <form id="add-card-form">
       <input id="new-card" type="text" />
       <input type="submit" value="Add Card" />

@@ -7,6 +7,11 @@ Template.editor.deckName = function () {
   return myDeck && myDeck.name;
 };
 
+Template.editor.deckCardCount = function () {
+  var myDeck = currentPlayerDeck();
+  return (myDeck && myDeck.card_names) ? myDeck.card_names.length : 0;
+};
+
 Template.editor.cards = function () {
   var myDeck = currentPlayerDeck();
   return myDeck ? myDeck.card_names : [];
