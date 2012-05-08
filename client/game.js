@@ -1,5 +1,5 @@
 Template.game.show = function () {
-  return !Session.get('editor');
+  return Session.equals('mode', 'game');
 }
 
 Template.game.gameName = function () {
@@ -192,7 +192,7 @@ Template.game.events = {
     $('#deck-name').show();
   },
   'click #edit-deck': function (e) {
-    Session.set('editor', true);
+    Session.set('mode', 'editor');
     e.preventDefault();
   },
   'click #start': function () {
@@ -216,6 +216,9 @@ Template.game.events = {
         Cards.update(card._id, {$set: {state: 'hand', hand_time: new Date().getTime()}});
       }
     }
+  },
+  'click #search': function () {
+    Session.set('mode', 'search');
   },
   'click #my-hand .card': function (e) {
     var cardId = e.target.id.substring(5);

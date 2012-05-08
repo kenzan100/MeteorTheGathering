@@ -11,6 +11,10 @@ body {
   height: 100%;
 }
 
+a {
+  color: #0431B4;
+}
+
 #game {
   width: 100%;
   height: 100%;
@@ -98,7 +102,7 @@ body {
   filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
 }
 
-#editor {
+#editor, #searcher {
   padding: 10px;
 }
 

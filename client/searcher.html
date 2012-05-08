@@ -1,0 +1,11 @@
+<template name="searcher">
+  {{#if show}}
+  <div id="searcher">
+    <strong>Pick a card to put in your hand</strong> <a href="#" id="cancel-search">cancel</a><br />
+    <br />
+    {{#each cards}}
+      <a href="#" class="search-card" id="search-{{_id}}">{{name}}</a><br />
+    {{/each}}
+  </div>
+  {{/if}}
+</template>

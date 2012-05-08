@@ -73,7 +73,9 @@
       {{#if isStarted}}
         <div id="library-info">
           Library ({{librarySize}})<br />
-          <input id="draw" type="button" value="Draw" />
+          <input id="draw" type="button" value="Draw" /><br />
+          <br />
+          <input id="search" type="button" value="Search" />
         </div>
         {{#each myHand}}
           <img src="http://gatherer.wizards.com/Handlers/Image.ashx?name={{name}}&type=card" class="card" title="{{name}}" id="card-{{_id}}" />

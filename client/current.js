@@ -45,7 +45,7 @@ Meteor.startup(function () {
 
   Session.set('game_id', gameId);  
   Session.set('player_id', playerId);
-  Session.set('editor', false);
+  Session.set('mode', 'game');
   
   Meteor.subscribe('games');
   Meteor.subscribe('players');

@@ -1,5 +1,5 @@
 Template.editor.show = function () {
-  return !!Session.get('editor');
+  return Session.equals('mode', 'editor');
 };
 
 Template.editor.deckName = function () {
@@ -14,7 +14,7 @@ Template.editor.cards = function () {
 
 Template.editor.events = {
   'click #done-editing': function (e) {
-    Session.set('editor', false);
+    Session.set('mode', 'game');
     e.preventDefault();
   },
   'submit #add-card-form': function (e) {
