@@ -68,12 +68,13 @@ Template.game.cardsOnMat = function () {
   return Cards.find({game_id: currentGameId(), $or: [{state: 'untapped'}, {state: 'tapped'}]})
     .map(function (card) {
       if (Session.equals('menu', card._id)) {
-        card.menuItems = [
-          card.state == 'untapped' ? {action: 'tap', text: 'tap'} : {action: 'untap', text: 'untap'},
-          {action: 'unsummon', text: 'return to hand'},
-          {action: 'libraryTop', text: 'put on top of library'},
-          {action: 'libraryBottom', text: 'put on bottom of library'}
-        ];
+        card.menuItems = [card.state == 'untapped' ? {action: 'tap', text: 'tap'} : {action: 'untap', text: 'untap'}];
+        if (isCurrentPlayerId(card.player_id)) {
+          card.menuItems.push(
+            {action: 'unsummon', text: 'return to hand'},
+            {action: 'libraryTop', text: 'put on top of library'},
+            {action: 'libraryBottom', text: 'put on bottom of library'});
+        }
         card.menuTop = card.state == 'tapped' ? card.top + 28 : card.top;
         card.menuLeft = card.state == 'tapped' ? card.left -28 : card.left;
       }

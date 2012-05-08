@@ -2,6 +2,10 @@ var currentPlayerId = function () {
   return Session.get('player_id');
 };
 
+var isCurrentPlayerId = function(id) {
+  return Session.equals('player_id', id);
+}
+
 var currentPlayer = function () {
   return Players.findOne(currentPlayerId());
 };
