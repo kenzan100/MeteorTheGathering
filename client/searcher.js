@@ -3,7 +3,7 @@ Template.searcher.show = function () {
 };
 
 Template.searcher.cards = function () {
-  return Cards.find({game_id: currentGameId(), player_id: currentPlayerId(), state: 'library'}, {sort: {name: 1}});
+  return Cards.find({game_id: currentGameId(), player_id: currentPlayerId(), $or: [{state: 'library'}, {state: 'libraryTop'}, {state: 'libraryBottom'}]}, {sort: {name: 1}});
 };
 
 Template.searcher.events = {

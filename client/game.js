@@ -42,7 +42,7 @@ Template.game.isStarted = function () {
 };
 
 Template.game.librarySize = function () {
-  return Cards.find({game_id: currentGameId(), player_id: currentPlayerId(), state: 'library'}).count();
+  return Cards.find({game_id: currentGameId(), player_id: currentPlayerId(), $or: [{state: 'library'}, {state: 'libraryTop'}, {state: 'libraryBottom'}]}).count();
 };
 
 Template.game.myHand = function () {
@@ -56,7 +56,7 @@ Template.game.opponentIsStarted = function () {
 
 Template.game.opponentLibrarySize = function () {
   var opp = currentOpponent();
-  return opp ? Cards.find({game_id: currentGameId(), player_id: opp._id, state: 'library'}).count() : 0;
+  return opp ? Cards.find({game_id: currentGameId(), player_id: opp._id, $or: [{state: 'library'}, {state: 'libraryTop'}, {state: 'libraryBottom'}]}).count() : 0;
 };
 
 Template.game.opponentHand = function () {
@@ -68,9 +68,12 @@ Template.game.cardsOnMat = function () {
   return Cards.find({game_id: currentGameId(), $or: [{state: 'untapped'}, {state: 'tapped'}]})
     .map(function (card) {
       if (Session.equals('menu', card._id)) {
-        card.menuItems = [];
-        card.menuItems.push(card.state == 'untapped' ? {action: 'tap', text: 'tap'} : {action: 'untap', text: 'untap'});
-        card.menuItems.push({action: 'unsummon', text: 'return to hand'});
+        card.menuItems = [
+          card.state == 'untapped' ? {action: 'tap', text: 'tap'} : {action: 'untap', text: 'untap'},
+          {action: 'unsummon', text: 'return to hand'},
+          {action: 'libraryTop', text: 'put on top of library'},
+          {action: 'libraryBottom', text: 'put on bottom of library'}
+        ];
         card.menuTop = card.state == 'tapped' ? card.top + 28 : card.top;
         card.menuLeft = card.state == 'tapped' ? card.left -28 : card.left;
       }
@@ -206,12 +209,23 @@ Template.game.events = {
   },
   'click #draw': function () {
     var myDeck = currentPlayerDeck();
-    var deckSize, skip, card;
+    var size, skip, card;
     
     if (myDeck) {
-      deckSize = Cards.find({game_id: currentGameId(), player_id: currentPlayerId(), state: 'library'}).count();
-      skip = Math.floor(Math.random() * deckSize);
-      card = Cards.findOne({game_id: currentGameId(), player_id: currentPlayerId(), state: 'library'}, {skip: skip});
+      card = Cards.findOne({game_id: currentGameId(), player_id: currentPlayerId(), state: 'libraryTop'}, {sort: {library_top_time: -1}});
+      
+      if (!card) {
+        size = Cards.find({game_id: currentGameId(), player_id: currentPlayerId(), state: 'library'}).count();
+        if (size > 0) {
+          skip = Math.floor(Math.random() * size);
+          card = Cards.findOne({game_id: currentGameId(), player_id: currentPlayerId(), state: 'library'}, {skip: skip});
+        }
+      }
+      
+      if (!card) {
+        card = Cards.findOne({game_id: currentGameId(), player_id: currentPlayerId(), state: 'libraryBottom'}, {sort: {library_bottom_time: 1}});
+      }
+      
       if (card) {
         Cards.update(card._id, {$set: {state: 'hand', hand_time: new Date().getTime()}});
       }
@@ -219,6 +233,9 @@ Template.game.events = {
   },
   'click #search': function () {
     Session.set('mode', 'search');
+  },
+  'click #shuffle': function () {
+    Cards.update({$or: [{state: 'libraryTop'}, {state: 'libraryBottom'}]}, {$set: {state: 'library'}}, {multi: true});
   },
   'click #my-hand .card': function (e) {
     var cardId = e.target.id.substring(5);
@@ -261,6 +278,12 @@ Template.game.events = {
     }
     else if ($target.hasClass('untap')) {
       Cards.update(cardId, {$set: {state: 'untapped'}});
+    }
+    else if ($target.hasClass('libraryTop')) {
+      Cards.update(cardId, {$set: {state: 'libraryTop', library_top_time: new Date().getTime()}});
+    }
+    else if ($target.hasClass('libraryBottom')) {
+      Cards.update(cardId, {$set: {state: 'libraryBottom', library_bottom_time: new Date().getTime()}});
     }
     
     e.preventDefault();
