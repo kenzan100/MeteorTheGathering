@@ -81,7 +81,7 @@ Template.game.cardsOnMat = function () {
 Template.game.events = {
   'click #show-game-form': function (e) {
     $('#game-name').hide();
-    $('#change-game-form').show();
+    $('#change-game-form').css('display', 'inline');
     $('#new-game').select();
     e.preventDefault();
   },
@@ -122,7 +122,7 @@ Template.game.events = {
   },
   'click #show-player-form': function (e) {
     $('#player-name').hide();
-    $('#change-player-form').show();
+    $('#change-player-form').css('display', 'inline');
     $('#new-player').select();
     e.preventDefault();
   },
@@ -158,7 +158,7 @@ Template.game.events = {
   },
   'click #show-deck-form': function (e) {
     $('#deck-name').hide();
-    $('#change-deck-form').show();
+    $('#change-deck-form').css('display', 'inline');
     $('#new-deck').select();
     e.preventDefault();
   },
