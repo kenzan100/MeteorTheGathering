@@ -1,11 +1,11 @@
 <head>
   <title>Meteor: The Gathering</title>
   <link rel="shortcut icon" href="favicon.ico" />
-  <script src="jquery-ui-1.8.20.custom.min.js"></script>
+  <script src="jquery-ui-1.8.20.custom.touchpunch.min.js"></script>
   <script>
     (function ($) {
      $.fn.liveDraggable = function (opts) {
-      this.live("mouseover", function() {
+      this.live("mouseover touchstart", function() {
         if (!$(this).data("init")) {
           $(this).data("init", true).draggable(opts);
         }
