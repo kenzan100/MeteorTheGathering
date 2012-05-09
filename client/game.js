@@ -246,21 +246,6 @@ Template.game.events = {
     var maxZIndex = incrementCurrentMaxZIndex();
     Cards.update(cardId, {$set: {state: 'untapped', top: top, left: left, z_index: maxZIndex}});
   },
-  'dragged .card': function (e) {
-    var cardId = e.target.id.substring(5);
-    var position = $(e.target).parent().position();
-    Cards.update(cardId, {$set: {top: position.top, left: position.left}});
-    Session.set('menu', '');
-  },
-  'elevate .card': function (e) {
-    var cardId = e.target.id.substring(5);
-    var maxZIndex = incrementCurrentMaxZIndex();
-    Cards.update(cardId, {$set: {z_index: maxZIndex}});
-  },
-  'menu .card': function (e) {
-    var cardId = e.target.id.substring(5);
-    Session.set('menu', cardId);
-  },
   'mousedown': function (e) {
     var menuCardId = Session.get('menu');
     if (e.target.id != 'menu' && e.target.id != ('card-' + menuCardId) && !$(e.target).parents('#menu').length) {
@@ -291,3 +276,56 @@ Template.game.events = {
     Session.set('menu', '');
   }
 };
+
+(function () {
+  var prevDraggedId = '';
+  var prevDraggedTime = 0;
+  
+  Template.game.events['drag .card-container'] = function (e) {
+    var now = new Date().getTime();
+    var cardId;
+    
+    if (e.target.id != prevDraggedId) {
+      cardId = e.target.id.substring(15);
+      elevate(cardId);
+      prevDraggedId = e.target.id;
+    }
+    
+    if (now - prevDraggedTime > 250) {
+      if (!cardId) {
+        cardId = e.target.id.substring(15);
+      }
+      dragged(cardId, $(e.target).position());
+      prevDraggedTime = now;
+    }
+  };
+  
+  Template.game.events['dragstop .card-container'] = function (e) {
+    var cardId = e.target.id.substring(15);
+    elevate(cardId);
+    dragged(cardId, $(e.target).position());
+    prevDraggedId = '';
+  };
+  
+  Template.game.events['mouseup #mat .card'] = function (e) {
+    var cardId;
+    
+    if (prevDraggedId != '') {
+      return;
+    }
+  
+    cardId = e.target.id.substring(5);
+    elevate(cardId);
+    Session.set('menu', cardId);
+  };
+  
+  function dragged (cardId, position) {
+    Cards.update(cardId, {$set: {top: position.top, left: position.left}});
+    Session.set('menu', '');
+  }
+  
+  function elevate (cardId) {
+    maxZIndex = incrementCurrentMaxZIndex();
+    Cards.update(cardId, {$set: {z_index: maxZIndex}});
+  }
+})();
