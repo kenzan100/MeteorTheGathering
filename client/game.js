@@ -208,6 +208,14 @@ Template.game.events = {
       }
     }
   },
+  'mouseover .card-container, touchstart .card-container': function (e) {
+    var $target = $(e.target);
+    var $cardContainer = $target.hasClass('card-container') ? $target : $target.parents('.card-container');
+    
+    if (!$cardContainer.data('isDraggable')) {
+      $cardContainer.data('isDraggable', true).draggable({distance: 3});
+    }
+  },
   'click #draw': function () {
     var myDeck = currentPlayerDeck();
     var size, skip, card;
